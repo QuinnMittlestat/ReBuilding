@@ -38,21 +38,27 @@ for row in rows[2:]:
         cities.append((city1, state))
         if len(names) > 2:
             cities.append((city2, state))
-#print(cities)
+print(cities)
 
 def geocoding(city,state):
     url = f"http://api.openweathermap.org/geo/1.0/direct?q={city},{state},US&appid=d49508eda5382fe81a5b8e5b4ce7e539"
     responseGeocoding = requests.get(url)
-    urlGeocoding = responseGeocoding.json()
-    return urlGeocoding
+    geocoding = responseGeocoding.json()
+    #print(geocoding)
+    lat = geocoding[0]['lat']
+    long = geocoding[0]['lon']
+    return (lat,long)
 
 def main(cities_list):
-    for city in cities_list:
-        lat = geocoding(city[0],city[1])['lat']
-        long = geocoding(city[0],city[1])['long']
+    list_coords = []
+    for item in cities_list[0:6]:
+        city = item[0]
+        state = item[1]
+        coords = geocoding(city,state)
+        list_coords.append(coords)
         #todays_date = weather(lat,long)['properties']['generatedAt'][5:10]
-
-main(cities)
+    #print(list_coords)
+#main(cities)
 
 
 '''
