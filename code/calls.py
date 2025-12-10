@@ -38,7 +38,7 @@ for row in rows[2:]:
         cities.append((city1, state))
         if len(names) > 2:
             cities.append((city2, state))
-print(cities)
+#print(cities)
 
 def geocoding(city,state):
     url = f"http://api.openweathermap.org/geo/1.0/direct?q={city},{state},US&appid=d49508eda5382fe81a5b8e5b4ce7e539"
