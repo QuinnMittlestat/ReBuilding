@@ -22,7 +22,5 @@ def main(cities_list):
         long = geocoding(city[0],city[1])['long']
         todays_date = weather(lat,long)['properties']['generatedAt'][5:10]
 
-
-
-
+main(cities)
 

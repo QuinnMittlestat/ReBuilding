@@ -9,3 +9,4 @@ def get_todays_temperature(weatherdata):
             temp_list.append(temperature)
     temp = sum(temp_list)/2
     return temp
+
