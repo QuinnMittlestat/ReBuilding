@@ -4,8 +4,9 @@ from bs4 import BeautifulSoup
 import re
 
 #List of Top Cities
-cities = []
-city_pattern = r"([A-Z]{1}.+)"
+def city_list():
+    cities = []
+    city_pattern = r"([A-Z]{1}.+)"
 
 wiki_url = "https://kids.kiddle.co/List_of_largest_cities_of_U.S._states_and_territories_by_population"
 wiki_r = requests.get(wiki_url)
@@ -38,7 +39,7 @@ for row in rows[2:]:
         cities.append((city1, state))
         if len(names) > 2:
             cities.append((city2, state))
-#print(cities)
+print(cities)
 
 def geocoding(city,state):
     url = f"http://api.openweathermap.org/geo/1.0/direct?q={city},{state},US&appid=d49508eda5382fe81a5b8e5b4ce7e539"
