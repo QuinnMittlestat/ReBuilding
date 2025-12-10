@@ -12,6 +12,7 @@ cities = []
 
 
 
+
 '''
 #Historical Weather Data
 oikolab_key = 'ce8810d4a9da4e90917232c8cd33e99f'
