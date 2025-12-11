@@ -1,6 +1,6 @@
 import sqlite3
 from calls import *
-#from main import *
+from main import *
 
 
 
@@ -24,19 +24,19 @@ s_id = 0
 last = ""
 for c in cities:
     city = c[0]
-    print(city)
+    #print(city)
     state = c[1]
-    print(state)
+    #print(state)
     c_id += 1
-    print(f"c = {c_id}")
-    print(f"last = {last}")
+    #print(f"c = {c_id}")
+    #print(f"last = {last}")
     if state != last:
         s_id += 1
         last = state
-        print(f"s = {s_id}")
-        print(f"last = {last}")
+        #print(f"s = {s_id}")
+        #print(f"last = {last}")
     curr.execute('''
-            INSERT INTO cities 
+            INSERT OR REPLACE INTO cities 
                 (city_id, city, state_id, state)
                 VALUES (?, ?, ?, ?) 
                 ''', 
@@ -53,32 +53,57 @@ curr.execute('''
         )
     ''')
 
-#c_id = 1
-#current_temps = main()
-#for temp in current_temps:
-#    curr.execute('''
-#            INSERT INTO todays_temp
-#                 (city_id, temperature)
-#                 VALUES (?, ?)
-#                 ''',
-#                 (c_id, current_temps[(c_id-1)])) 
-#    c_id += 1
-
 #Historical Weather
 curr.execute('''
         CREATE TABLE IF NOT EXISTS historic_temp (
             city_id INTEGER PRIMARY KEY,
-            historic_temperature INTEGER
+            ten_year_temp INTEGER,
+            twenty_five_year_temp INTEGER
         )
     ''')
 
-#c_id = 1
-#historical_temps = historical_temps()
-#for temp in historical_temps:
-#    curr.execute('''
-#            INSERT INTO historical_temp
-#                 (city_id, temperature)
-#                 VALUES (?, ?)
-#                 ''',
-#                 (c_id, historical_temps[(c_id-1)])) 
-#    c_id += 1
+temp_data = main()
+
+current_temps = temp_data[0]
+ten_temps = temp_data[1]
+twentyfive_temps = temp_data[2]
+
+#Current Weather
+c_id = 1
+for temp in current_temps:
+    print(f"current:{temp}")
+    print(current_temps[(c_id - 1)])
+    curr.execute('''
+            INSERT OR REPLACE INTO todays_temp
+                 (city_id, temperature)
+                 VALUES (?, ?)
+                 ''',
+                 (c_id, current_temps[(c_id - 1)])) 
+    c_id += 1
+
+#Historical Weather
+c_id = 1
+for temp in ten_temps:
+    print(f"10:{temp}")
+    print(ten_temps[(c_id - 1)])
+    curr.execute('''
+            INSERT OR REPLACE INTO historic_temp
+                 (city_id, ten_year_temp)
+                 VALUES (?, ?)
+                 ''',
+                 (c_id, ten_temps[(c_id - 1)])) 
+    c_id += 1
+
+c_id = 1
+for temp in twentyfive_temps:
+    t = []
+    t.append(temp)
+    print(f"25:{temp}")
+    print(twentyfive_temps[(c_id - 1)])
+    curr.execute('''
+            INSERT OR REPLACE INTO historic_temp
+                 (twenty_five_year_temp)
+                 VALUES (?)
+                 ''',
+                 (t))
+    c_id += 1
