@@ -1,12 +1,12 @@
 import sqlite3
 from calls import *
+#from main import *
 
 
 
 conn = sqlite3.connect("weather_data.db")
 curr = conn.cursor()
 
-curr.execute('DROP TABLE cities')
 
 #Cities
 curr.execute('''
@@ -41,25 +41,44 @@ for c in cities:
                 VALUES (?, ?, ?, ?) 
                 ''', 
                 (c_id, city, s_id, state))
-    
+    conn.commit()
 
 
-    
         
 #Current Weather
 curr.execute('''
         CREATE TABLE IF NOT EXISTS todays_temp (
-            id INTEGER PRIMARY KEY,
-            date TEXT NOT NULL,
+            city_id INTEGER PRIMARY KEY,
             temperature INTEGER
         )
     ''')
 
+#c_id = 1
+#current_temps = main()
+#for temp in current_temps:
+#    curr.execute('''
+#            INSERT INTO todays_temp
+#                 (city_id, temperature)
+#                 VALUES (?, ?)
+#                 ''',
+#                 (c_id, current_temps[(c_id-1)])) 
+#    c_id += 1
+
 #Historical Weather
 curr.execute('''
         CREATE TABLE IF NOT EXISTS historic_temp (
-            id INTEGER PRIMARY KEY,
-            historic_date TEXT NOT NULL,
+            city_id INTEGER PRIMARY KEY,
             historic_temperature INTEGER
         )
     ''')
+
+#c_id = 1
+#historical_temps = historical_temps()
+#for temp in historical_temps:
+#    curr.execute('''
+#            INSERT INTO historical_temp
+#                 (city_id, temperature)
+#                 VALUES (?, ?)
+#                 ''',
+#                 (c_id, historical_temps[(c_id-1)])) 
+#    c_id += 1
