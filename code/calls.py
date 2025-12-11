@@ -80,22 +80,21 @@ def get_todays_temperature(weather_data_list):
         temp_list.append((sum(l)/len(l)))
     return temp_list
 
-
-
-
-#Historical Weather Data
-oikolab_key = 'ce8810d4a9da4e90917232c8cd33e99f'
-hw_url = 'https://api.oikolab.com/weather'
-hw_params = {'param': 'temperature', 'location': 'Boise, Idaho', 'start': '1990-01-01', 'end': '1990-01-01', 'freq': 'D'}
-hw_headers = {'api-key': oikolab_key}
-hw_r = requests.get(hw_url, hw_params, headers={'api-key': oikolab_key})
-old_weather_data = json.loads(hw_r.json()['data'])
-temp = old_weather_data['data'][0][4]
-
-
-
-
-
+def get_historical_temp(cities,date):
+    historical_temp_list = []
+    for item in cities:
+        city = item[0]
+        state = item[1] 
+        string = f"{city}, {state}"
+        oikolab_key = 'ce8810d4a9da4e90917232c8cd33e99f'
+        hw_url = 'https://api.oikolab.com/weather'
+        hw_params = {'param': 'temperature', 'location': string, 'start': date, 'end': date, 'freq': 'D'}
+        #hw_headers = {'api-key': oikolab_key}
+        hw_r = requests.get(hw_url, hw_params, headers={'api-key': oikolab_key})
+        print(json.loads(hw_r.json()))
+        old_weather_data = json.loads(hw_r.json()['data'])
+        temp = old_weather_data['data'][0][4]
+        historical_temp_list.append(temp)
 
 
 '''zipCode = "to be done"
