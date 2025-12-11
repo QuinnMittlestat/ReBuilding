@@ -86,22 +86,13 @@ def get_historical_temp(cities,date):
         city = item[0]
         state = item[1] 
         string = f"{city}, {state}"
-        oikolab_key = 'ce8810d4a9da4e90917232c8cd33e99f'
+        oikolab_key = '42460cb8074f40d49294c0c93b4e8853'
         hw_url = 'https://api.oikolab.com/weather'
         hw_params = {'param': 'temperature', 'location': string, 'start': date, 'end': date, 'freq': 'D'}
         #hw_headers = {'api-key': oikolab_key}
         hw_r = requests.get(hw_url, hw_params, headers={'api-key': oikolab_key})
-        print(json.loads(hw_r.json()))
-        old_weather_data = json.loads(hw_r.json()['data'])
+        old_weather_data = hw_r.json()['data']
+        old_weather_data = json.loads(old_weather_data)
         temp = old_weather_data['data'][0][4]
         historical_temp_list.append(temp)
-
-
-'''zipCode = "to be done"
-countryCode = "US"
-urlGeocoding = (f"http://api.openweathermap.org/geo/1.0/zip?zip={zipCode},{countryCode}&appid=d49508eda5382fe81a5b8e5b4ce7e539")
-
-responseGeocoding = requests.get(urlGeocoding)
-urlGeocoding = responseGeocoding.json()
-lat = urlGeocoding['lat'] #Getting latitude from geocoding
-long = urlGeocoding['lon'] #Getting longitude from geocoding'''
+    return historical_temp_list
