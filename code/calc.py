@@ -14,15 +14,18 @@ def calculate_temp_difference():
 
     conn.commit()
     result = curr.fetchall()
+
+    difference_list = []
     for row in result:
+        print(row)
         city = row[0]
-        tenyeardifference = float(row[1] - row[2])
-        twentyfiveyeardifference = float(row[1] - row[3])
-        ten = f"{city}: {tenyeardifference}"
-        twenfive = f"{city}: {twentyfiveyeardifference}"
-        print(ten, twenfive)
+        tenyeardifference = round((float(row[1] - row[2])), 2)
+        twentyfiveyeardifference = round((float(row[1] - row[3])), 2)
+        t = (city, tenyeardifference, twentyfiveyeardifference)
+        difference_list.append(t)
 
     conn.close()
+    return difference_list
     #curr.execute('''SELECT previous, Present, previous-Present as Difference from tablename
                 #''')
-    
+print(calculate_temp_difference())
