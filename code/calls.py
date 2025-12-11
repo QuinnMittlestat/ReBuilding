@@ -43,34 +43,44 @@ def city_list():
     #print(cities)
     return cities
 
-
-
 def geocoding(cities):
-    url = f"http://api.openweathermap.org/geo/1.0/direct?q={city},{state},US&appid=d49508eda5382fe81a5b8e5b4ce7e539"
-    responseGeocoding = requests.get(url)
-    geocoding = responseGeocoding.json()
-    #print(geocoding)
-    lat = geocoding[0]['lat']
-    long = geocoding[0]['lon']
-    return (lat,long)
+    coords_list = []
+    for city in cities:
+        url = f"http://api.openweathermap.org/geo/1.0/direct?q={city[0]},{city[1]},US&appid=d49508eda5382fe81a5b8e5b4ce7e539"
+        responseGeocoding = requests.get(url)
+        geocoding = responseGeocoding.json()
+        lat = geocoding[0]['lat']
+        long = geocoding[0]['lon']
+        coords = (lat,long)
+        coords_list.append(coords)
+    return coords_list
 
-def weather(lat,long):
-    urlWeather = (f"https://api.weather.gov/points/{lat},{long}")
-    responseWeather = requests.get(urlWeather)
-    get_urlWeather = responseWeather.json()
-    forecast_url = get_urlWeather["properties"]["forecast"]
-    response_urlWeather = requests.get(forecast_url)
-    weather_data = response_urlWeather.json()
-    return weather_data
+def weather(coords_list):
+    weather_data_list = []
+    for coords in coords_list:
+        lat = coords[0]
+        long = coords[1]
+        urlWeather = (f"https://api.weather.gov/points/{lat},{long}")
+        responseWeather = requests.get(urlWeather)
+        get_urlWeather = responseWeather.json()
+        forecast_url = get_urlWeather["properties"]["forecast"]
+        response_urlWeather = requests.get(forecast_url)
+        weather_data = response_urlWeather.json()
+        weather_data_list.append(weather_data)
+    return weather_data_list
 
-def get_todays_temperature(weatherdata,lat,long):
+def get_todays_temperature(weather_data_list):
     temp_list = []
-    todays_date = weather(lat,long)['properties']['generatedAt'][:10]
-    for i in range(len(weatherdata['properties']['periods'])):
-        if todays_date == weatherdata['properties']['periods'][i]['startTime'][5:10]:
-            temperature = float(weatherdata['properties']['periods'][i]['temperature'])
-            temp_list.append(temperature)
+    for weatherdata in weather_data_list:
+        todays_date = weatherdata['properties']['generatedAt'][:10]
+        for i in range(len(weatherdata['properties']['periods'])):
+            l = []
+            if todays_date == weatherdata['properties']['periods'][i]['startTime'][:10] or todays_date == weatherdata['properties']['periods'][i]['endTime'][:10]:
+                temperature = float(weatherdata['properties']['periods'][i]['temperature'])
+            l.append(temperature)
+        temp_list.append((sum(l)/len(l)))
     return temp_list
+
 
 
 '''
