@@ -30,7 +30,7 @@ def city_list():
                     #print(match.encode('utf-8'))
                     names.append(match.encode('utf-8'))
         #print(names)
-        territories = ['American Samoa', 'Guam', 'Northern Mariana Islands', 'Puerto Rico', 'Virgin Islands (U.S.)']
+        territories = ['American Samoa', 'Guam', 'Northern Mariana Islands', 'Puerto Rico', 'Virgin Islands (U.S.)', 'District of Columbia']
         if names[0] not in territories:
             state = names[0]
             city1 = names[1]
@@ -39,10 +39,12 @@ def city_list():
             cities.append((city1, state))
             if len(names) > 2:
                 cities.append((city2, state))
-    print(cities)
+    #print(cities)
     return cities
 
-def geocoding(city,state):
+
+
+def geocoding(cities):
     url = f"http://api.openweathermap.org/geo/1.0/direct?q={city},{state},US&appid=d49508eda5382fe81a5b8e5b4ce7e539"
     responseGeocoding = requests.get(url)
     geocoding = responseGeocoding.json()
@@ -51,16 +53,23 @@ def geocoding(city,state):
     long = geocoding[0]['lon']
     return (lat,long)
 
-def main(cities_list):
-    list_coords = []
-    for item in cities_list[0:6]:
-        city = item[0]
-        state = item[1]
-        coords = geocoding(city,state)
-        list_coords.append(coords)
-        #todays_date = weather(lat,long)['properties']['generatedAt'][5:10]
-    #print(list_coords)
-#main(cities)
+def weather(lat,long):
+    urlWeather = (f"https://api.weather.gov/points/{lat},{long}")
+    responseWeather = requests.get(urlWeather)
+    get_urlWeather = responseWeather.json()
+    forecast_url = get_urlWeather["properties"]["forecast"]
+    response_urlWeather = requests.get(forecast_url)
+    weather_data = response_urlWeather.json()
+    return weather_data
+
+def get_todays_temperature(weatherdata,lat,long):
+    temp_list = []
+    todays_date = weather(lat,long)['properties']['generatedAt'][:10]
+    for i in range(len(weatherdata['properties']['periods'])):
+        if todays_date == weatherdata['properties']['periods'][i]['startTime'][5:10]:
+            temperature = float(weatherdata['properties']['periods'][i]['temperature'])
+            temp_list.append(temperature)
+    return temp_list
 
 
 '''
