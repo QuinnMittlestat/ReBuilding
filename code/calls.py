@@ -3,6 +3,7 @@ import json
 from bs4 import BeautifulSoup
 import re
 
+
 #List of Top Cities
 def city_list():
     cities = []
