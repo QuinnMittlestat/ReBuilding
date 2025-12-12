@@ -12,6 +12,7 @@ temp_data = main()
 current_temps = temp_data[0]
 ten_temps = temp_data[1]
 twentyfive_temps = temp_data[2]
+list_coords = temp_data[3]
 
 #Cities
 curr.execute('''
@@ -26,6 +27,14 @@ curr.execute('''
         CREATE TABLE IF NOT EXISTS state_ids (
             state_id INTEGER PRIMARY KEY, 
             state TEXT NOT NULL
+        )
+    ''')
+
+curr.execute('''
+        CREATE TABLE IF NOT EXISTS coordinates (
+            city_id INTEGER PRIMARY KEY,
+            latitude INTEGER,
+            longitude INTEGER
         )
     ''')
 
@@ -45,6 +54,14 @@ curr.execute('''
             twenty_five_year_temp INTEGER
         )
     ''')
+
+# curr.execute('''
+#         CREATE TABLE IF NOT EXISTS precipitation (
+#             city_id INTEGER PRIMARY KEY,
+#             precipitation INTEGER,
+#         )
+#     ''')
+
 
 cities = city_list()
 c_id = 0
@@ -78,6 +95,19 @@ for c in cities:
                 (s_id, state))
 
 c_id = 1
+for coords in list_coords:
+    lat = coords[0]
+    long = coords[1]
+    print(f"current: {coords}")
+    curr.execute('''
+            INSERT OR REPLACE INTO coordinates
+                 (city_id, latitude, longitude)
+                 VALUES (?, ?, ?)
+                 ''',
+                 (c_id, lat, long)) 
+    c_id += 1
+
+c_id = 1
 for temp in current_temps:
     print(f"current: {temp}")
     curr.execute('''
@@ -98,5 +128,8 @@ for ten_year, twenfive_year in zip(ten_temps,twentyfive_temps):
                  ''',
                  (c_id, ten_year, twenfive_year)) 
     c_id += 1
+
+
+
     
 conn.commit()

@@ -16,7 +16,7 @@ def main():
     list_todays_temps = get_todays_temperature(list_weather_data)
     list_historic_temps_10yr = get_historical_temp(list_cities,date1)
     list_historic_temps_25yr = get_historical_temp(list_cities,date2)
-    temp_data = (list_todays_temps,list_historic_temps_10yr,list_historic_temps_25yr)
+    temp_data = (list_todays_temps,list_historic_temps_10yr,list_historic_temps_25yr,list_coords)
     return temp_data
 
 print(main())
