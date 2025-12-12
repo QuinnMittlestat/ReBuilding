@@ -12,11 +12,7 @@ def city_list():
     wiki_r = requests.get(wiki_url)
     soup = BeautifulSoup(wiki_r.content, 'html.parser')
     table = soup.find_all('table', class_="wikitable sortable sort-under")[0]
-    #print(type(table))
-    #print(table.encode('utf-8'))
     rows = table.find_all('tr')
-    #for i in rows:
-    #    print(i.encode('utf-8'))
     for row in rows[2:]:
         boxes = row.find_all('td')
         names = []
@@ -24,12 +20,9 @@ def city_list():
             matches = re.findall(city_pattern, box.get_text())
             for match in matches:
                 try:
-                    #print(match)
                     names.append(match)
                 except:
-                    #print(match.encode('utf-8'))
                     names.append(match.encode('utf-8'))
-        #print(names)
         territories = ['American Samoa', 'Guam', 'Northern Mariana Islands', 'Puerto Rico', 'Virgin Islands (U.S.)', 'District of Columbia']
         if names[0] not in territories:
             state = names[0]
@@ -39,7 +32,6 @@ def city_list():
             cities.append((city1, state))
             if len(names) > 2:
                 cities.append((city2, state))
-    #print(cities)
     return cities
 
 def geocoding(cities):
@@ -53,6 +45,7 @@ def geocoding(cities):
         coords = (lat,long)
         coords_list.append(coords)
     return coords_list
+
 
 def weather(coords_list):
     weather_data_list = []
@@ -86,10 +79,9 @@ def get_historical_temp(cities,date):
         city = item[0]
         state = item[1] 
         string = f"{city}, {state}"
-        oikolab_key = '77b376452e3f48a49f580214f09aafba'
+        oikolab_key = '99b9298e09bf4d0391f1e42ec8b27ac7'
         hw_url = 'https://api.oikolab.com/weather'
         hw_params = {'param': 'temperature', 'location': string, 'start': date, 'end': date, 'freq': 'D'}
-        #hw_headers = {'api-key': oikolab_key}
         hw_r = requests.get(hw_url, hw_params, headers={'api-key': oikolab_key})
         old_weather_data = hw_r.json()['data']
         old_weather_data = json.loads(old_weather_data)
