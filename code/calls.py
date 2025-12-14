@@ -79,7 +79,7 @@ def get_historical_temp(cities,date):
         city = item[0]
         state = item[1] 
         string = f"{city}, {state}"
-        oikolab_key = '99b9298e09bf4d0391f1e42ec8b27ac7'
+        oikolab_key = '577d335dbf214ed697a3a306b0d634a1'
         hw_url = 'https://api.oikolab.com/weather'
         hw_params = {'param': 'temperature', 'location': string, 'start': date, 'end': date, 'freq': 'D'}
         hw_r = requests.get(hw_url, hw_params, headers={'api-key': oikolab_key})
