@@ -1,6 +1,5 @@
 from calls import *
 
-<<<<<<< HEAD
 def main():
     list_cities = city_list()
     list_coords = geocoding(list_cities)
