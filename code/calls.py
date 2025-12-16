@@ -81,13 +81,12 @@ def get_todays_temperature(weather_data_list):
 
 
 def get_historical_temp(cities,date):
-<<<<<<< HEAD
     historical_temp_list = []
     for item in cities:
         city = item[0]
         state = item[1] 
         string = f"{city}, {state}"
-        oikolab_key = '577d335dbf214ed697a3a306b0d634a1'
+        oikolab_key = '76cb7bee1b5c402598813331d522ec91'
         hw_url = 'https://api.oikolab.com/weather'
         hw_params = {'param': 'temperature', 'location': string, 'start': date, 'end': date, 'freq': 'D'}
         hw_r = requests.get(hw_url, hw_params, headers={'api-key': oikolab_key})
@@ -97,23 +96,3 @@ def get_historical_temp(cities,date):
         temp = round((((9/5) * temp) + 32), 2)
         historical_temp_list.append(temp)
     return historical_temp_list
-=======
-   historical_temp_list = []
-   for item in cities:
-       city = item[0]
-       state = item[1]
-       string = f"{city}, {state}"
-       oikolab_key = '577d335dbf214ed697a3a306b0d634a1'
-       hw_url = 'https://api.oikolab.com/weather'
-       hw_params = {'param': 'temperature', 'location': string, 'start': date, 'end': date, 'freq': 'D'}
-       hw_r = requests.get(hw_url, hw_params, headers={'api-key': oikolab_key})
-       old_weather_data = hw_r.json()['data']
-       old_weather_data = json.loads(old_weather_data)
-       temp = old_weather_data['data'][0][4]
-       temp = round((((9/5) * temp) + 32), 2)
-       historical_temp_list.append(temp)
-   return historical_temp_list
-
-
-
->>>>>>> e209a99860614a96de2a28e9f8016d98f61e6f95
